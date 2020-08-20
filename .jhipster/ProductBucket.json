@@ -1,0 +1,38 @@
+{
+  "name": "ProductBucket",
+  "fields": [
+    {
+      "fieldName": "availableToSellQuantity",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "inChargeQuantity",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "brokenQuantity",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "product",
+      "otherEntityRelationshipName": "productBucket",
+      "relationshipName": "product",
+      "otherEntityField": "id",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20200820235158",
+  "entityTableName": "product_bucket",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

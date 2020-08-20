@@ -1,0 +1,11 @@
+entity Product {
+name String
+}
+entity ProductBucket {
+availableToSellQuantity BigDecimal,
+inChargeQuantity BigDecimal,
+brokenQuantity BigDecimal
+}
+relationship OneToOne {
+ProductBucket{product} to Product
+}
