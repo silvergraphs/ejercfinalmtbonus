@@ -82,29 +82,47 @@ export const Product = props => {
     callApi();
   }, [props.list]);
 
-  const moveProduct = (productId, newState) => {
-    axios
-      .put('/api/buckets', {
-        id: productId.toString(),
-        state: newState,
-      })
-      .then(function () {
-        toast.success('Producto movido 👌');
-        callApi();
-      })
-      .catch(function () {
-        toast.error('Error al mover el producto');
-      });
+  const moveProduct = (productId, previousQuantity, previousBucket, newQuantity, newBucket) => {
+    // Realizo comprobaciones para que los datos a procesar sean correctos
+    if (newQuantity > previousQuantity) {
+      toast.error('No se pueden mover mas unidades de las que hay en el balde');
+    } else if (newQuantity < 0) {
+      toast.error('La cantidad ingresada es incorrecta');
+    } else {
+      // Se llama a la API para que devuelva el producto a mover
+      axios
+        .get('/api/product-buckets/' + productId.toString())
+        .then(function (response) {
+          // Se realizan las modificaciones de las unidades en stock
+          response.data[previousBucket] = parseFloat(previousQuantity) - parseFloat(newQuantity);
+          response.data[newBucket] += parseFloat(newQuantity);
+
+          // Se llama a la API para efectuar los cambios
+          axios
+            .put('/api/product-buckets/', {
+              id: productId,
+              availableToSellQuantity: response.data.availableToSellQuantity,
+              inChargeQuantity: response.data.inChargeQuantity,
+              brokenQuantity: response.data.brokenQuantity,
+              product: null,
+            })
+            .then(function () {
+              toast.success('Producto movido 👌');
+              callApi();
+            })
+            .catch(function () {
+              toast.error('Error al mover el producto');
+            });
+        })
+        .catch(function (error) {
+          toast.error('Error al contactarse con la API - ' + error);
+        });
+    }
   };
 
-  const fetchBucket = index => {
-    if (props.list === 'inChargeQuantity') {
-      return productList[0][index].inChargeQuantity;
-    } else if (props.list === 'availableToSellQuantity') {
-      return productList[0][index].availableToSellQuantity;
-    } else {
-      return productList[0][index].brokenQuantity;
-    }
+  let quantity = 0;
+  const setField = e => {
+    quantity = e.target.value;
   };
 
   return (
@@ -134,7 +152,7 @@ export const Product = props => {
                   {product.id}
                 </TableCell>
                 <TableCell align="center">{product.name}</TableCell>
-                <TableCell align="center">{fetchBucket(index)}</TableCell>
+                <TableCell align="center">{productList[0][index][props.list]}</TableCell>
                 <TableCell align="right">
                   {props.list === 'brokenQuantity' ? (
                     <>
@@ -148,6 +166,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         className={classes.buttons}
+                        onChange={e => setField(e)}
                       />
                       Mover a
                       <Button
@@ -155,7 +174,9 @@ export const Product = props => {
                         className={classes.buttons}
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, 'SHIPPED')}
+                        onClick={() => {
+                          moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'inChargeQuantity');
+                        }}
                         startIcon={<AllInboxIcon />}
                       >
                         Encargados
@@ -164,7 +185,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, 'SHIPPED')}
+                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
                         startIcon={<AssignmentTurnedInIcon />}
                       >
                         Disponibles
@@ -172,12 +193,25 @@ export const Product = props => {
                     </>
                   ) : props.list === 'availableToSellQuantity' ? (
                     <>
+                      <TextField
+                        id="outlined-number"
+                        label="Cantidad"
+                        type="number"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        className={classes.buttons}
+                        onChange={e => setField(e)}
+                      />
+                      Mover a
                       <Button
                         variant="outlined"
                         className={classes.buttons}
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, 'SHIPPED')}
+                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
                         startIcon={<AllInboxIcon />}
                       >
                         Encargados
@@ -186,7 +220,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, 'SHIPPED')}
+                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
                         startIcon={<BuildIcon />}
                       >
                         Defectuosos
@@ -194,12 +228,25 @@ export const Product = props => {
                     </>
                   ) : (
                     <>
+                      <TextField
+                        id="outlined-number"
+                        label="Cantidad"
+                        type="number"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        className={classes.buttons}
+                        onChange={e => setField(e)}
+                      />
+                      Mover a
                       <Button
                         variant="outlined"
                         className={classes.buttons}
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, 'SHIPPED')}
+                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
                         startIcon={<AssignmentTurnedInIcon />}
                       >
                         Disponibles
@@ -208,7 +255,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, 'SHIPPED')}
+                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
                         startIcon={<BuildIcon />}
                       >
                         Defectuosos
