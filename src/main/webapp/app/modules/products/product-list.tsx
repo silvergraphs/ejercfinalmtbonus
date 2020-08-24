@@ -60,6 +60,15 @@ export const Product = props => {
     });
   };
 
+  // Funcion de utilidad para ordenar los array
+  function sortByKey(array, key) {
+    return array.sort(function (a, b) {
+      const x = a[key];
+      const y = b[key];
+      return x < y ? -1 : x > y ? 1 : 0;
+    });
+  }
+
   const callApi = () => {
     // URL de las API
     const products = '/api/products';
@@ -75,7 +84,7 @@ export const Product = props => {
         const sReq = responses[1];
 
         // Se crea un nuevo array para filtrar los baldes
-        const filteredBuckets = [];
+        let filteredBuckets = [];
         sReq.data.map(bucketsData => {
           const prodId = bucketsData.id;
           pReq.data.map(productData => {
@@ -87,6 +96,9 @@ export const Product = props => {
           });
         });
 
+        sReq.data = sortByKey(sReq.data, 'id');
+        filteredBuckets = sortByKey(filteredBuckets, 'id');
+
         const filteredData = [sReq.data, filteredBuckets];
 
         setProductList(filteredData); // Se envia toda la informacion filtrada al estado del componente
@@ -94,6 +106,7 @@ export const Product = props => {
     );
   };
 
+  // Se llama a la API una vez el componente este totalmente cargado
   React.useEffect(() => {
     callApi();
   }, [props.list]);
@@ -165,7 +178,7 @@ export const Product = props => {
                   {product.id}
                 </TableCell>
                 <TableCell align="center">{product.name}</TableCell>
-                <TableCell align="center">{productList[0][index][props.list]}</TableCell>
+                <TableCell align="center">{productList[0][index][props.list]} en stock</TableCell>
                 <TableCell align="right">
                   {props.list === 'brokenQuantity' ? (
                     <>
