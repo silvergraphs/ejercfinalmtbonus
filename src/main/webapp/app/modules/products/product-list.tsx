@@ -43,7 +43,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Product = props => {
   const classes = useStyles();
 
+  // Estados del componente
+
+  // Datos que trae la API
   const [productList, setProductList] = React.useState([[], []]);
+
+  // Datos que ingresa el usuario
   const [inputData, setInputData] = React.useState({
     stockQuantity: 0,
   });
@@ -69,19 +74,20 @@ export const Product = props => {
         const pReq = responses[0];
         const sReq = responses[1];
 
-        // Se crea el array para la lista con los nombres de los productos
-        const filteredProducts = [];
+        // Se crea un nuevo array para filtrar los baldes
+        const filteredBuckets = [];
         sReq.data.map(bucketsData => {
           const prodId = bucketsData.id;
           pReq.data.map(productData => {
             if (prodId === productData.id) {
-              filteredProducts.push(productData);
-              // Se agregan los productos que coincidan con los datos filtrados en filteredbuckets a este nuevo array
+              // Si el ID del producto coincide con el ID del balde
+              filteredBuckets.push(productData);
+              // Se agregan los baldes que coincidan a este nuevo array
             }
           });
         });
 
-        const filteredData = [sReq.data, filteredProducts];
+        const filteredData = [sReq.data, filteredBuckets];
 
         setProductList(filteredData); // Se envia toda la informacion filtrada al estado del componente
       })
