@@ -44,6 +44,16 @@ export const Product = props => {
   const classes = useStyles();
 
   const [productList, setProductList] = React.useState([[], []]);
+  const [inputData, setInputData] = React.useState({
+    stockQuantity: 0,
+  });
+
+  const handleInputChange = event => {
+    setInputData({
+      ...inputData,
+      stockQuantity: Number(event.target.value),
+    });
+  };
 
   const callApi = () => {
     // URL de las API
@@ -88,6 +98,8 @@ export const Product = props => {
       toast.error('No se pueden mover mas unidades de las que hay en el balde');
     } else if (newQuantity < 0) {
       toast.error('La cantidad ingresada es incorrecta');
+    } else if (newQuantity === 0) {
+      toast.warn('Ingrese una cantidad');
     } else {
       // Se llama a la API para que devuelva el producto a mover
       axios
@@ -107,7 +119,7 @@ export const Product = props => {
               product: null,
             })
             .then(function () {
-              toast.success('Producto movido 👌');
+              toast.success(newQuantity + ' producto(s) movido 👌');
               callApi();
             })
             .catch(function () {
@@ -118,11 +130,6 @@ export const Product = props => {
           toast.error('Error al contactarse con la API - ' + error);
         });
     }
-  };
-
-  let quantity = 0;
-  const setField = e => {
-    quantity = e.target.value;
   };
 
   return (
@@ -166,7 +173,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         className={classes.buttons}
-                        onChange={e => setField(e)}
+                        onChange={handleInputChange}
                       />
                       Mover a
                       <Button
@@ -174,7 +181,15 @@ export const Product = props => {
                         className={classes.buttons}
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'inChargeQuantity')}
+                        onClick={() =>
+                          moveProduct(
+                            product.id,
+                            productList[0][index][props.list],
+                            props.list,
+                            inputData.stockQuantity,
+                            'inChargeQuantity'
+                          )
+                        }
                         startIcon={<AllInboxIcon />}
                       >
                         Encargados
@@ -184,7 +199,13 @@ export const Product = props => {
                         size="small"
                         color="primary"
                         onClick={() =>
-                          moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'availableToSellQuantity')
+                          moveProduct(
+                            product.id,
+                            productList[0][index][props.list],
+                            props.list,
+                            inputData.stockQuantity,
+                            'availableToSellQuantity'
+                          )
                         }
                         startIcon={<AssignmentTurnedInIcon />}
                       >
@@ -203,7 +224,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         className={classes.buttons}
-                        onChange={e => setField(e)}
+                        onChange={handleInputChange}
                       />
                       Mover a
                       <Button
@@ -211,7 +232,15 @@ export const Product = props => {
                         className={classes.buttons}
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'inChargeQuantity')}
+                        onClick={() =>
+                          moveProduct(
+                            product.id,
+                            productList[0][index][props.list],
+                            props.list,
+                            inputData.stockQuantity,
+                            'inChargeQuantity'
+                          )
+                        }
                         startIcon={<AllInboxIcon />}
                       >
                         Encargados
@@ -220,7 +249,9 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'brokenQuantity')}
+                        onClick={() =>
+                          moveProduct(product.id, productList[0][index][props.list], props.list, inputData.stockQuantity, 'brokenQuantity')
+                        }
                         startIcon={<BuildIcon />}
                       >
                         Defectuosos
@@ -238,7 +269,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         className={classes.buttons}
-                        onChange={e => setField(e)}
+                        onChange={handleInputChange}
                       />
                       Mover a
                       <Button
@@ -247,7 +278,13 @@ export const Product = props => {
                         size="small"
                         color="primary"
                         onClick={() =>
-                          moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'availableToSellQuantity')
+                          moveProduct(
+                            product.id,
+                            productList[0][index][props.list],
+                            props.list,
+                            inputData.stockQuantity,
+                            'availableToSellQuantity'
+                          )
                         }
                         startIcon={<AssignmentTurnedInIcon />}
                       >
@@ -257,7 +294,9 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        onClick={() => moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'brokenQuantity')}
+                        onClick={() =>
+                          moveProduct(product.id, productList[0][index][props.list], props.list, inputData.stockQuantity, 'brokenQuantity')
+                        }
                         startIcon={<BuildIcon />}
                       >
                         Defectuosos
