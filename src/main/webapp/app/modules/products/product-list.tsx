@@ -138,7 +138,7 @@ export const Product = props => {
               product: null,
             })
             .then(function () {
-              toast.success(newQuantity + ' producto(s) movido 👌');
+              toast.success(newQuantity + ' producto(s) movido(s) 👌');
               callApi();
             })
             .catch(function () {
@@ -184,6 +184,7 @@ export const Product = props => {
                     <>
                       <TextField
                         id="outlined-number"
+                        name="test"
                         label="Cantidad"
                         type="number"
                         InputLabelProps={{
