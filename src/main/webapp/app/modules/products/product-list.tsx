@@ -174,9 +174,7 @@ export const Product = props => {
                         className={classes.buttons}
                         size="small"
                         color="primary"
-                        onClick={() => {
-                          moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'inChargeQuantity');
-                        }}
+                        onClick={() => moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'inChargeQuantity')}
                         startIcon={<AllInboxIcon />}
                       >
                         Encargados
@@ -185,7 +183,9 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
+                        onClick={() =>
+                          moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'availableToSellQuantity')
+                        }
                         startIcon={<AssignmentTurnedInIcon />}
                       >
                         Disponibles
@@ -211,7 +211,7 @@ export const Product = props => {
                         className={classes.buttons}
                         size="small"
                         color="primary"
-                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
+                        onClick={() => moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'inChargeQuantity')}
                         startIcon={<AllInboxIcon />}
                       >
                         Encargados
@@ -220,7 +220,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
+                        onClick={() => moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'brokenQuantity')}
                         startIcon={<BuildIcon />}
                       >
                         Defectuosos
@@ -246,7 +246,9 @@ export const Product = props => {
                         className={classes.buttons}
                         size="small"
                         color="primary"
-                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
+                        onClick={() =>
+                          moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'availableToSellQuantity')
+                        }
                         startIcon={<AssignmentTurnedInIcon />}
                       >
                         Disponibles
@@ -255,7 +257,7 @@ export const Product = props => {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        /* onClick={() => moveProduct(product.id, quantity, 'SHIPPED')} */
+                        onClick={() => moveProduct(product.id, productList[0][index][props.list], props.list, quantity, 'brokenQuantity')}
                         startIcon={<BuildIcon />}
                       >
                         Defectuosos
