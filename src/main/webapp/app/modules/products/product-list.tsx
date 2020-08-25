@@ -96,6 +96,7 @@ export const Product = props => {
           });
         });
 
+        // Se ordenan los array por ID
         sReq.data = sortByKey(sReq.data, 'id');
         filteredBuckets = sortByKey(filteredBuckets, 'id');
 
